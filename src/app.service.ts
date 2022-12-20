@@ -1,24 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { ethers } from 'ethers';
 import { Pool, PoolDocument } from './schemas/pool.schema';
 import { Account, AccountDocument } from './schemas/account.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { AccountDto } from './dto/account.dto';
 import { PoolDto } from './dto/pool.dto';
+import { MyLogger } from './my-logger.service';
 
 @Injectable()
-export class AppService {
+export class AppService {private readonly logger = new MyLogger(AppService.name);
   constructor(@InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
               @InjectModel(Pool.name) private readonly poolModel: Model<PoolDocument>) {}
   
   // Account
   async createAccount(accountDto: AccountDto): Promise < AccountDocument > {
+    this.logger.log(['createAccount', accountDto]);
     const account = new this.accountModel(accountDto);
     return account.save();
   }
 
   async findAllAccount(): Promise < AccountDocument[] > {
+    this.logger.log('findAllAccount');
     return this.accountModel.find().exec();
   }
 

@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { ethers } from 'ethers';
 import { AppService } from './app.service';
 import { AccountDto } from './dto/account.dto';
 import { PoolDto } from './dto/pool.dto';
@@ -9,6 +10,13 @@ export class AccountController {
 
   @Post()
   create(@Body() accountDto: AccountDto) {
+    console.log(12, accountDto)
+    if (!('address' in accountDto)) {
+      throw new BadRequestException('No account address was provided.');
+    }
+    if (ethers.utils.isAddress(accountDto.address) === false) {
+      throw new BadRequestException('The provided account address is not valid.');
+    }
     return this.appService.createAccount(accountDto);
   }
 
@@ -39,6 +47,19 @@ export class PoolController {
 
   @Post()
   create(@Body() poolDto: PoolDto) {
+    if (!('pool_address' in poolDto)) {
+      throw new BadRequestException('No pool address was provided.');
+    }
+    if (ethers.utils.isAddress(poolDto.pool_address) === false) {
+      throw new BadRequestException('The provided pool address is not valid.');
+    }
+
+    if (!('owner' in poolDto)) {
+      throw new BadRequestException('No pool owner was provided.');
+    }
+    if (ethers.utils.isAddress(poolDto.owner) === false) {
+      throw new BadRequestException('The provided owner address is not valid.');
+    }
     return this.appService.createPool(poolDto);
   }
 
