@@ -47,6 +47,7 @@ export class PoolController {
 
   @Post()
   create(@Body() poolDto: PoolDto) {
+    console.log(50, poolDto)
     if (!('pool_address' in poolDto)) {
       throw new BadRequestException('No pool address was provided.');
     }
@@ -57,9 +58,9 @@ export class PoolController {
     if (!('owner' in poolDto)) {
       throw new BadRequestException('No pool owner was provided.');
     }
-    if (ethers.utils.isAddress(poolDto.owner) === false) {
-      throw new BadRequestException('The provided owner address is not valid.');
-    }
+    // if (ethers.utils.isAddress(poolDto.owner) === false) {
+    //   throw new BadRequestException('The provided owner address is not valid.');
+    // }
     return this.appService.createPool(poolDto);
   }
 

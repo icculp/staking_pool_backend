@@ -21,11 +21,11 @@ export class AppLoggerMiddleware implements NestMiddleware {
       const { statusCode } = response;
       const contentLength = response.get('content-length');
     
-      this.logger.log(
+      this.logger.log(24, 
         `${method} ${url} ${statusCode} ${contentLength} - ${userAgent} ${ip}`
       );
-      this.logger.log(['request', request.body]);
-      this.logger.log(['response', response.statusMessage   ]);
+      this.logger.log([27,'request', request.body]);
+      this.logger.log([28,'response', response.statusMessage   ]);
     });
 
     next();

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Pool, PoolDocument } from './schemas/pool.schema';
 import { Account, AccountDocument } from './schemas/account.schema';
 import { Model } from 'mongoose';
@@ -15,6 +15,7 @@ export class AppService {private readonly logger = new MyLogger(AppService.name)
   // Account
   async createAccount(accountDto: AccountDto): Promise < AccountDocument > {
     this.logger.log(['createAccount', accountDto]);
+    console.log(18, accountDto)
     const account = new this.accountModel(accountDto);
     return account.save();
   }
@@ -25,7 +26,14 @@ export class AppService {private readonly logger = new MyLogger(AppService.name)
   }
 
   async findOneAccount(id: string) {
-    return this.accountModel.findById(id);
+    // address, not id. keep in mind for puts/deletes
+    const acc = await this.accountModel.findOne({address:id},).lean().exec()
+    console.log(29, acc)
+    if (!acc) {
+      throw new NotFoundException("Not found!!")
+    }
+    this.logger.log(['findOneAccount', id]);
+    return acc;
   }
 
   async updateAccount(id: string, accountDto: AccountDto): Promise < AccountDocument > {

@@ -5,7 +5,7 @@ import { MyLogger } from './my-logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    bufferLogs: true,
+    bufferLogs: true, cors: true
   });
 
 

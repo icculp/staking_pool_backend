@@ -7,10 +7,10 @@ export type PoolDocument = HydratedDocument<Pool>;
 
 @Schema()
 export class Pool {
-  @Prop()
+  @Prop({required: true, unique: true})
   pool_address: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Account' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true })
   owner: Account;
 
   @Prop()
